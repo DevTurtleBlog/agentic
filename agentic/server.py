@@ -1,4 +1,4 @@
-import importlib, pkgutil, types
+import importlib, pkgutil
 from a2a.server.agent_execution import AgentExecutor, RequestContext
 from a2a.server.events import EventQueue, Event
 from a2a.types import AgentCard, AgentSkill, AgentCapabilities
@@ -7,65 +7,7 @@ from a2a.server.apps import A2AStarletteApplication
 from a2a.server.request_handlers import DefaultRequestHandler
 from fastapi import FastAPI
 import uvicorn
-
-
-registered_agents = {}
-registered_skills = {}
-
-def agent(description, url:str=None, version="1.0.0", defaultInputModes=['text'], defaultOutputModes=['text'], streaming=True):
-    if url is not None:
-        if url != None and url.startswith('/'):
-                url = url[1:]
-        if url.endswith('/'):
-            url = url[:-1]
-    def decorator(cls):
-        if not isinstance(cls, type):
-            raise TypeError("@agent should be used on a class")
-        nonlocal url
-        if url is None:
-            url = cls.__qualname__.lower()
-            print(url)
-        agent = {
-            "name": cls.__qualname__,
-            "description": description,
-            "url": url+'/',
-            "version": version,
-            "defaultInputModes": defaultInputModes,
-            "defaultOutputModes": defaultOutputModes,
-            "streaming": streaming,
-            "class": cls,
-            "skills": {}
-        }
-        registered_agents[cls.__qualname__]=agent
-        return cls
-    return decorator
-
-def skill(id=None, name=None, description=None, tags=[], examples=[]):
-    def decorator(func):
-        if not isinstance(func, types.FunctionType):
-            raise TypeError("@skill should be used on a function")
-        
-        qualname = func.__qualname__
-        # se qualname non containe "."
-        if "." not in qualname:
-            raise TypeError("@skill should be used on a class method")
-        
-        class_name = qualname.split(".")[0]
-
-        skill = {
-            "id": id,
-            "name": name,
-            "agent": class_name,
-            "description": description,
-            "function": func,
-            "tags": tags,
-            "examples": examples
-        }
-
-        registered_skills[id]=skill
-
-        return func
-    return decorator
+from agentic.core import registered_agents, registered_skills
 
 class AgenticServer:
     """ The main App class of the Agentic framework """
@@ -79,7 +21,19 @@ class AgenticServer:
         self.base_url = base_url
         self.__run_server()
         self.__merge_skills_in_agents()
+        self.__init_agent()
         self.__setup_a2a_server()
+
+    def __init_agent(self):
+        """ Initialize the agent """
+        for agent in registered_agents.values():
+            cls = agent["class"]
+            skills = []
+            for skill in agent['skills'].values():
+                skills.append(skill['function'])
+            def get_skills(self):
+                return skills
+            cls.get_skills = get_skills
 
     def __scan_imports(self, package_name):
         """ Import all modules in a package and its subpackages """

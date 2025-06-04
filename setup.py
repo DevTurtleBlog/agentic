@@ -6,7 +6,7 @@ setup(
     version='0.1.0',
     description='Python framework for implementing multi-agent systems',
     author='gderito90@gmaill.com',
-    install_requires=['uvicorn', 'fastapi', 'a2a-sdk'],
+    install_requires=['uvicorn', 'fastapi', 'a2a-sdk', 'langchain-core'],
     extras_require={
         'dev': ['pytest', 'pytest-runner'],
         'test': ['pytest'],
