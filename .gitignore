@@ -1,4 +1,5 @@
 build
 dist
+.venv
 agentic.egg-info
 agentic_py.egg-info
