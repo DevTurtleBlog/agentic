@@ -7,10 +7,12 @@ from a2a.server.apps import A2AStarletteApplication
 from a2a.server.request_handlers import DefaultRequestHandler
 from fastapi import FastAPI
 import uvicorn
-from agentic.core import registered_agents, registered_skills
+from agentic.core import registered_agents, registered_skills, AgentInfo
 
 class AgenticServer:
     """ The main App class of the Agentic framework """
+
+    fastapi = FastAPI()
 
     def __init__(self, base_url:str, scan_root:str=None):
         """ Initialize the AgenticApp """
@@ -19,7 +21,6 @@ class AgenticServer:
         if base_url.endswith('/'):
             base_url = base_url[:-1]
         self.base_url = base_url
-        self.__run_server()
         self.__merge_skills_in_agents()
         self.__init_agent()
         self.__setup_a2a_server()
@@ -57,11 +58,18 @@ class AgenticServer:
         """ Setup the agent-to-agent server """
         agent_cards = self.__generate_agents_cards()
         app_builders = self.__generate_app_builders(agent_cards)
-        fastapi = FastAPI()
         for builder in app_builders:
             url = builder.agent_card.url.replace(self.base_url, '')
-            fastapi.mount(url, builder.build()) 
-        uvicorn.run(fastapi, host='0.0.0.0', port=9999)
+            self.fastapi.mount(url, builder.build()) 
+        @self.fastapi.get("/agents", response_model=list[dict])
+        def list_agents() -> list[AgentInfo]:
+            agent_list:list[AgentInfo]=[]
+            for agent in agent_cards:
+                agent_url = agent.url.replace(self.base_url, '')
+                agent_list.append(AgentInfo(name=agent.name, path=agent_url, description=agent.description, version=agent.version))
+            return agent_list
+        self.list_agents = list_agents
+        uvicorn.run(self.fastapi, host='0.0.0.0', port=9999)
         
     def __generate_agents_cards(self):
         """ Generate the agents cards """
@@ -89,7 +97,7 @@ class AgenticServer:
             agent_cards.append(agent_card)
         return agent_cards
     
-    def __generate_app_builders(self, agent_cards):
+    def __generate_app_builders(self, agent_cards) -> list[A2AStarletteApplication]:
         """ Generate the executors """
         app_builders = []
         for agent_card in agent_cards:
@@ -115,8 +123,4 @@ class AgenticServer:
             )
             app_builders.append(server_app_builder)
         return app_builders
-    
-    def __run_server(self):
-        """ Run the server """
-        print("Server running...")
         

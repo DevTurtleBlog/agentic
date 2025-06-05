@@ -2,6 +2,7 @@ import types
 from abc import ABC, abstractmethod
 from a2a.server.agent_execution import RequestContext
 from a2a.server.events import Event
+from typing import TypedDict
 
 registered_agents = {}
 registered_skills = {}
@@ -24,7 +25,7 @@ def agent(description, url:str=None, version="1.0.0", defaultInputModes=['text']
         agent = {
             "name": cls.__qualname__,
             "description": description,
-            "url": url+'/',
+            "url": url + '/',
             "version": version,
             "defaultInputModes": defaultInputModes,
             "defaultOutputModes": defaultOutputModes,
@@ -47,7 +48,13 @@ def skill(id=None, name=None, description=None, tags=[], examples=[]):
             raise TypeError("@skill should be used on a class method")
         
         class_name = qualname.split(".")[0]
-
+        
+        nonlocal id, name
+        if id is None:
+            id = class_name
+        if name is None:
+            name = class_name
+        
         skill = {
             "id": id,
             "name": name,
@@ -68,11 +75,16 @@ class BaseAgent(ABC):
     def __init__(self):
         pass
 
-    def get_skills(self):
-        """ Get the skills of the agent. This method is overrided by the agent decorator. """
+    def get_skills(self) -> list[types.FunctionType]:
+        """ Get the skill functions of the agent. This method is overrided by the agent decorator. """
         pass
 
     @abstractmethod
     async def execute(self, input:RequestContext) -> Event:
         """ Execute the agent """
         pass
+
+class AgentInfo(TypedDict):
+    """ Info about the agents exposed by the agentic server """
+    name: str
+    path: str
