@@ -2,11 +2,11 @@
 
 A Python framework for developing and deploying multi-agent AI applications using the agent-to-agent (a2a) protocol.
 
-> ⚠️ **Beta Version**: This framework is currently in active development and is considered a beta release. Features may change, and some functionality may be unstable. Use with caution in production environments.
+> ⚠️ **Beta Version**: This framework is currently in active development and is considered a beta release. Features may change, and some functionality may be unstable.
 
 ## Overview
 
-Agentic is a powerful framework that simplifies the creation of multi-agent systems by leveraging the a2a protocol. Built on top of [FastAPI](https://fastapi.tiangolo.com/) and the [a2a-sdk](https://github.com/google-a2a/a2a-python), Agentic enables developers to easily define, deploy, and manage multiple AI agents on a single server.
+Agentic is a powerful framework that simplifies the creation of multi-agent systems by leveraging the a2a protocol. Built on top of [FastAPI](https://fastapi.tiangolo.com/) and the [a2a-sdk](https://github.com/google-a2a/a2a-python), Agentic enables developers to easily define, deploy, and manage multiple AI agents.
 
 ## Key Features
 
@@ -23,7 +23,6 @@ This project is currently in **beta development**. We are actively working on:
 - Stabilizing the core API
 - Adding comprehensive documentation
 - Implementing additional features
-- Bug fixes and performance improvements
 
 Feedback and contributions are highly appreciated as we work towards a stable release.
 
@@ -33,20 +32,6 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 Use decorators to define agents and their skills:
 - `@agent`: Define an agent with metadata like name, description, and capabilities
 - `@skill`: Define specific skills/functions that agents can perform
-
-### Server
-- Deploy multiple agents on a single server
-- Automatic agent card generation
-- Built-in request handling and task management
-
-### Client
-- Easy-to-use client for interacting with deployed agents
-- Support for invoking agent skills remotely
-- Agent discovery capabilities
-
-### Utilities
-- `RequestParser`: Parse and extract parts from agent requests
-- Message handling and part extraction utilities
 
 ## Getting Started
 
@@ -95,19 +80,6 @@ Agentic follows the agent-to-agent (a2a) protocol specification, enabling:
 - a2a-python SDK
 - httpx (for client functionality)
 
-## Installation
-
-```bash
-pip install agentic-a2a
-```
-
-## Known Limitations (Beta)
-
-- API may change in future versions
-- Limited documentation and examples
-- Some features may be incomplete or unstable
-- Error handling may need improvements
-
 ## Contributing
 
 As this is a beta project, contributions are especially welcome! Please feel free to:
@@ -115,19 +87,6 @@ As this is a beta project, contributions are especially welcome! Please feel fre
 - Suggest new features
 - Submit pull requests
 - Provide feedback on the API design
-
-## Roadmap
-
-- [ ] Stabilize core API
-- [ ] Add comprehensive documentation
-- [ ] Implement additional agent capabilities
-- [ ] Add more examples and tutorials
-- [ ] Performance optimizations
-- [ ] Production-ready features
-
-## License
-
-[Add your license information here]
 
 ## Links
 
