@@ -39,30 +39,52 @@ Use decorators to define agents and their skills:
 
 1. **Define an Agent**:
    ```python
-   @agent(name="MyAgent", description="A sample agent")
-   class MyAgent:
-       
-       @skill(name="process_text", description="Process text input")
-       def process_text(self, text: str) -> str:
-           return f"Processed: {text}"
+   @agent(
+    description="Agent for performing arithmetic operations",
+    )
+    class MathAgent(BaseAgent):
+
+        async def execute(self, input:RequestContext) -> Event:
+            ...
+            out = new_agent_text_message("The result is: ...")
+            return out
+
+        @skill(
+            name="Sum operation", 
+            description="Retur result of sum of two numbers",
+        )
+        async def sum(self, input):
+            ...
    ```
 
 2. **Deploy the Server**:
    ```python
-   from agentic.server import AgenticServer
-   
-   server = AgenticServer()
-   server.add_agent(MyAgent)
-   server.run()
+    from agentic.server import AgenticServer
+    app = AgenticServer(base_url='http://localhost:9999/', scan_root='agents')
    ```
 
 3. **Use the Client**:
    ```python
-   from agentic.client import AgenticClient
-   
-   client = AgenticClient("http://localhost:8000")
-   agents = await client.get_agents()
-   result = await client.invoke("/my-agent", parts=[...])
+    import asyncio
+    from agentic.client import AgenticClient
+    from agentic.core import AgentInfo
+    from agentic.utility import ResponseParser
+    from a2a.types import DataPart
+
+    async def main():
+        BASE_URL =  'http://localhost:9999'
+        client = AgenticClient(base_url=BASE_URL)
+
+        data = { "messages": [
+                {'role': 'user', 'content': '...'}
+        ]}
+
+        result = await client.invoke("/mathagent", parts=[DataPart(data=data)])
+        parser = ResponseParser(result)
+        print("RESULT: ", parser.get_parts())
+
+    if __name__ == "__main__":
+        asyncio.run(main())
    ```
 
 ## Architecture
