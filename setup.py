@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name='agentic-py',
+    name='agentic-a2a',
     packages=find_packages(include=[
         'agentic', 
         'agentic.a2a',
