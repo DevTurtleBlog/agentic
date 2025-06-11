@@ -34,12 +34,12 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 > **Note**: As this is a beta version, the API may change in future releases.
 
 1. **Define project structure**:
-    - app
-    -- agents
-    --- hello_agent.py
-    -- tools
-    --- hello_tool.py
-    main.py
+    - app <br>
+    -- agents <br>
+    --- hello_agent.py <br>
+    -- tools <br>
+    --- hello_tool.py <br>
+    main.py <br>
 
 1. **Define an Agent**:
 
@@ -75,7 +75,7 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 
     ```python
     from agentic.mcp.core import mcp
-    
+
     @mcp(
         name="hello_world",
         methods=["GET"],
@@ -95,7 +95,7 @@ Feedback and contributions are highly appreciated as we work towards a stable re
     AgenticApp(root_package='app').run()
     ```
 
-    The 'app' package should contain the agents and tools defined in steps 1 and 2. 
+    The 'app' package should contain the agents and tools defined in steps 1 and 2. <br>
     You can define sub-packages to organize your agents and tools. At the server start, the server will automatically discover all agents and tools.
 
 4. **Use the A2A Client**:
@@ -133,10 +133,7 @@ Agentic follows the agent-to-agent (a2a) protocol specification, enabling:
 
 ## Requirements
 
-- Python 3.8+
-- FastAPI
-- a2a-python SDK
-- httpx (for client functionality)
+- Python 3.13+
 
 ## Contributing
 
@@ -150,4 +147,6 @@ As this is a beta project, contributions are especially welcome! Please feel fre
 
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [A2A Python SDK](https://github.com/google-a2a/a2a-python)
+- [FastAPI MCP](https://github.com/tadata-org/fastapi_mcp)
 - [Agent-to-Agent Protocol Specification](https://github.com/google-a2a)
+- [MCP protocol](https://modelcontextprotocol.io/introduction)
