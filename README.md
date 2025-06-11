@@ -34,10 +34,12 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 > **Note**: As this is a beta version, the API may change in future releases.
 
 1. **Define project structure**:
-    - app <br>
+    \- app <br>
     -- agents <br>
+    --- __init__.py <br>
     --- hello_agent.py <br>
     -- tools <br>
+    --- __init__.py <br>
     --- hello_tool.py <br>
     main.py <br>
 
