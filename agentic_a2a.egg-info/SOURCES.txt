@@ -1,0 +1,17 @@
+README.md
+setup.py
+agentic/__init__.py
+agentic/server.py
+agentic/a2a/__init__.py
+agentic/a2a/client.py
+agentic/a2a/core.py
+agentic/a2a/server.py
+agentic/a2a/utility.py
+agentic/mcp/__init__.py
+agentic/mcp/core.py
+agentic/mcp/server.py
+agentic_a2a.egg-info/PKG-INFO
+agentic_a2a.egg-info/SOURCES.txt
+agentic_a2a.egg-info/dependency_links.txt
+agentic_a2a.egg-info/requires.txt
+agentic_a2a.egg-info/top_level.txt

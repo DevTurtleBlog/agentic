@@ -1,0 +1,11 @@
+uvicorn
+fastapi
+a2a-sdk
+fastapi-mcp
+
+[dev]
+pytest
+pytest-runner
+
+[test]
+pytest

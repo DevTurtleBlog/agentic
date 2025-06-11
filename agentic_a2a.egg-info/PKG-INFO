@@ -1,3 +1,33 @@
+Metadata-Version: 2.4
+Name: agentic-a2a
+Version: 0.1.2
+Summary: Python framework for implementing multi-agent systems
+Home-page: https://github.com/DevTurtleBlog/agentic
+Author: devturtleblog@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: uvicorn
+Requires-Dist: fastapi
+Requires-Dist: a2a-sdk
+Requires-Dist: fastapi-mcp
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-runner; extra == "dev"
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Dynamic: author
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
 # Agentic A2A
 
 A Python framework for developing and deploying complete AI applications that includes:
@@ -33,76 +63,53 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 
 > **Note**: As this is a beta version, the API may change in future releases.
 
-1. **Define project structure**:
-    - app
-    -- agents
-    --- hello_agent.py
-    -- tools
-    --- hello_tool.py
-    main.py
-
 1. **Define an Agent**:
+   ```python
+   from agentic.a2a.core import agent, skill, BaseAgent
+   from a2a.server.agent_execution import RequestContext
+   from a2a.utils import new_agent_text_message
+   from a2a.server.events import Event
 
-    Create the hello_agent.py file with the following content:
-
-    ```python
-    from agentic.a2a.core import agent, skill, BaseAgent
-    from a2a.server.agent_execution import RequestContext
-    from a2a.utils import new_agent_text_message
-    from a2a.server.events import Event
-
-    @agent(
-        description="Hello World Agent",
+   @agent(
+    description="Agent for performing arithmetic operations",
     )
-    class HelloAgent(BaseAgent):
+    class MathAgent(BaseAgent):
 
         async def execute(self, input:RequestContext) -> Event:
-            out = new_agent_text_message("Hello World!")
+            ...
+            out = new_agent_text_message("The result is: ...")
             return out
 
         @skill(
-            name="say_hello", 
-            description="Say hello to someone by name",
+            name="Sum operation", 
+            description="Retur result of sum of two numbers",
         )
-        async def say_hello(self, name):
+        async def sum(self, input):
             ...
-            return "Hello " + name + "!"
-    ```
+            return "The result is: ..."
+   ```
 
 2. **Define an MCP Tool**:
-
-    Create the hello_tool.py file with the following content:
-
-    ```python
+   ```python
     from agentic.mcp.core import mcp
-    
     @mcp(
         name="hello_world",
         methods=["GET"],
         path="/hello/{name}",
     )
     def hello_world(name:str) -> str:
-        """ Hello World MCP tool """
+        """ Prenota un concerto."""
         return "Hello, " + name + "!"
     ```
 
 3. **Deploy the Server**:
-
-    Create the main.py file with the following content:
-
-    ```python
+   ```python
     from agentic.server import AgenticApp
-    AgenticApp(root_package='app').run()
-    ```
-
-    The 'app' package should contain the agents and tools defined in steps 1 and 2. 
-    You can define sub-packages to organize your agents and tools. At the server start, the server will automatically discover all agents and tools.
+    AgenticApp(root_package='agents').run()
+   ```
 
 4. **Use the A2A Client**:
-
-    To test the server, you can use the A2A client. Here's an example of how to use the client to interact with the server:
-
-    ```python
+   ```python
     import asyncio
     from agentic.a2a.client import ClientA2A
     from agentic.a2a.utility import ResponseParser
@@ -112,16 +119,16 @@ Feedback and contributions are highly appreciated as we work towards a stable re
         client = ClientA2A(url='http://localhost:9999')
 
         data = { "messages": [
-                {'role': 'user', 'content': 'Hello!'},
+                {'role': 'user', 'content': '...'}
         ]}
         
-        result = await client.invoke("/say_hello", parts=[DataPart(data=data)])
+        result = await client.invoke("/mathAgent", parts=[DataPart(data=data)])
         parser = ResponseParser(result)
         print("RESULT: ", parser.get_parts())
 
     if __name__ == "__main__":
     asyncio.run(main())
-    ```
+   ```
 
 ## Architecture
 

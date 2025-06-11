@@ -12,7 +12,7 @@ class AgenticApp(AgenticMcpServer, AgenticA2AServer):
             protocol:str='http',
             hostname:str = 'localhost',
             port:int = 9999,
-            scan_root:str=None, 
+            root_package:str=None, 
             server_name:str=None,
             enable_a2a:bool=True,
             enable_mcp:bool=True,
@@ -20,8 +20,8 @@ class AgenticApp(AgenticMcpServer, AgenticA2AServer):
         """ Initialize the AgenticApp """
         self.hostname = hostname
         self.port = port
-        if scan_root:
-            self.__scan_imports(scan_root)
+        if root_package:
+            self.__scan_imports(root_package)
         self.base_url = f"{protocol}://{hostname}:{port}"
         self.fastapi= FastAPI()
         if enable_mcp:
