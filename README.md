@@ -96,7 +96,15 @@ Feedback and contributions are highly appreciated as we work towards a stable re
     ```
 
     The 'app' package should contain the agents and tools defined in steps 1 and 2. <br>
-    You can define sub-packages to organize your agents and tools. At the server start, the server will automatically discover all agents and tools.
+    You can define sub-packages to organize your agents and tools. At the server start, the server will automatically discover all agents and tools.<br>
+    Run the app with:
+
+    ```
+    python main.py
+    ```
+
+    The app will start by default on "[http://localhost:9999](http://localhost:9999)".
+    You can see the APIs documentation at "[http://localhost:9999/docs](http://localhost:9999/docs)".
 
 4. **Use the A2A Client**:
 
