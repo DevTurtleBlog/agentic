@@ -1,4 +1,4 @@
-# Agentic
+# Agentic A2A
 
 A Python framework for developing and deploying complete AI applications that includes:
 - Multi-agent systems according to the Agent2Agent (A2A) protocol
@@ -59,13 +59,26 @@ Feedback and contributions are highly appreciated as we work towards a stable re
             return "The result is: ..."
    ```
 
-2. **Deploy the Server**:
+2. **Define an MCP Tool**:
+   ```python
+    from agentic.mcp.core import mcp
+    @mcp(
+        name="hello_world",
+        methods=["GET"],
+        path="/hello/{name}",
+    )
+    def hello_world(name:str) -> str:
+        """ Prenota un concerto."""
+        return "Hello, " + name + "!"
+    ```
+
+3. **Deploy the Server**:
    ```python
     from agentic.server import AgenticApp
     AgenticApp(scan_root='agents').run()
    ```
 
-3. **Use the A2A Client**:
+4. **Use the A2A Client**:
    ```python
     import asyncio
     from agentic.a2a.client import ClientA2A
@@ -73,7 +86,7 @@ Feedback and contributions are highly appreciated as we work towards a stable re
     from a2a.types import DataPart
 
     async def main():
-        client = ClientA2A(base_url='http://localhost:9999')
+        client = ClientA2A(url='http://localhost:9999')
 
         data = { "messages": [
                 {'role': 'user', 'content': '...'}
@@ -86,19 +99,6 @@ Feedback and contributions are highly appreciated as we work towards a stable re
     if __name__ == "__main__":
     asyncio.run(main())
    ```
-
-4. **Define an MCP Tool**:
-   ```python
-    from agentic.mcp.core import mcp
-    @mcp(
-        name="hello_world",
-        methods=["GET"],
-        path="/hello/{name}",
-    )
-    def hello_world(name:str) -> str:
-        """ Prenota un concerto."""
-        return "Hello, " + name + "!"
-    ```
 
 ## Architecture
 

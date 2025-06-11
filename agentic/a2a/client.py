@@ -15,8 +15,8 @@ from agentic.a2a.core import AgentInfo
 class ClientA2A:
     """ The Client class of the Agentic framework """
     
-    def __init__(self, base_url):
-        self.base_url = base_url
+    def __init__(self, url):
+        self.base_url = url
     
     async def get_agents(self) -> list[AgentInfo]:
         """ Get the agents exposed by the server """
