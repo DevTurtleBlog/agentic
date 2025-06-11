@@ -11,7 +11,7 @@ setup(
         'agentic.a2a',
         'agentic.mcp'
     ]),
-    version='0.1.0',
+    version='0.1.1',
     description='Python framework for implementing multi-agent systems',
     author='devturtleblog@gmail.com',
     long_description=long_description,
