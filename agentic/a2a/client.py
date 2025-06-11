@@ -10,9 +10,9 @@ from a2a.types import (
     Part,
     JSONRPCResponse
 )
-from agentic.core import AgentInfo
+from agentic.a2a.core import AgentInfo
 
-class AgenticClient:
+class ClientA2A:
     """ The Client class of the Agentic framework """
     
     def __init__(self, base_url):
@@ -20,7 +20,7 @@ class AgenticClient:
     
     async def get_agents(self) -> list[AgentInfo]:
         """ Get the agents exposed by the server """
-        return httpx.get(f"{self.base_url}/agents").json()
+        return httpx.get(f"{self.base_url}/a2a/agents").json()
     
     async def invoke(self, agent_path:str, role:Role=Role.user, parts:list[Part]=[], message_id:str=uuid4().hex) -> JSONRPCResponse:
         async with httpx.AsyncClient() as httpx_client:

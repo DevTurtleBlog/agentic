@@ -1,12 +1,15 @@
 # Agentic
 
-A Python framework for developing and deploying multi-agent AI applications using the agent-to-agent (a2a) protocol.
+A Python framework for developing and deploying complete AI applications that includes:
+- Multi-agent systems according to the Agent2Agent (A2A) protocol
+- MCP tools
 
 > ⚠️ **Beta Version**: This framework is currently in active development and is considered a beta release. Features may change, and some functionality may be unstable.
 
 ## Overview
 
 Agentic is a powerful framework that simplifies the creation of multi-agent systems by leveraging the a2a protocol. Built on top of [FastAPI](https://fastapi.tiangolo.com/) and the [a2a-sdk](https://github.com/google-a2a/a2a-python), Agentic enables developers to easily define, deploy, and manage multiple AI agents.
+Agentic also allows the creation of tools according to the MCP standard. The MCP system is built on top of [FastApiMCP](https://github.com/tadata-org/fastapi_mcp).
 
 ## Key Features
 
@@ -14,8 +17,8 @@ Agentic is a powerful framework that simplifies the creation of multi-agent syst
 - **Multi-Agent Server**: Deploy multiple agents on the same server instance
 - **A2A Protocol Support**: Built-in support for agent-to-agent communication using the standardized a2a protocol
 - **FastAPI Integration**: Leverages FastAPI's performance and features for robust web service deployment
-- **Request Parsing**: Built-in utilities for parsing and handling agent requests
-- **Client SDK**: Included client for easy interaction with deployed agents
+- **A2A Client**: Included client for easy interaction with deployed agents
+- **MCP Tools**: Use `@mcp` decorator to expose tools according to the MCP standard
 
 ## Development Status
 
@@ -26,19 +29,17 @@ This project is currently in **beta development**. We are actively working on:
 
 Feedback and contributions are highly appreciated as we work towards a stable release.
 
-## Main Components
-
-### Agent Definition
-Use decorators to define agents and their skills:
-- `@agent`: Define an agent with metadata like name, description, and capabilities
-- `@skill`: Define specific skills/functions that agents can perform
-
 ## Getting Started
 
 > **Note**: As this is a beta version, the API may change in future releases.
 
 1. **Define an Agent**:
    ```python
+   from agentic.a2a.core import agent, skill, BaseAgent
+   from a2a.server.agent_execution import RequestContext
+   from a2a.utils import new_agent_text_message
+   from a2a.server.events import Event
+
    @agent(
     description="Agent for performing arithmetic operations",
     )
@@ -55,37 +56,48 @@ Use decorators to define agents and their skills:
         )
         async def sum(self, input):
             ...
+            return "The result is: ..."
    ```
 
 2. **Deploy the Server**:
    ```python
-    from agentic.server import AgenticServer
-    app = AgenticServer(base_url='http://localhost:9999/', scan_root='agents')
+    from agentic.server import AgenticApp
+    AgenticApp(scan_root='agents').run()
    ```
 
-3. **Use the Client**:
+3. **Use the A2A Client**:
    ```python
     import asyncio
-    from agentic.client import AgenticClient
-    from agentic.core import AgentInfo
-    from agentic.utility import ResponseParser
+    from agentic.a2a.client import ClientA2A
+    from agentic.a2a.utility import ResponseParser
     from a2a.types import DataPart
 
     async def main():
-        BASE_URL =  'http://localhost:9999'
-        client = AgenticClient(base_url=BASE_URL)
+        client = ClientA2A(base_url='http://localhost:9999')
 
         data = { "messages": [
                 {'role': 'user', 'content': '...'}
         ]}
-
-        result = await client.invoke("/mathagent", parts=[DataPart(data=data)])
+        
+        result = await client.invoke("/mathAgent", parts=[DataPart(data=data)])
         parser = ResponseParser(result)
         print("RESULT: ", parser.get_parts())
 
     if __name__ == "__main__":
-        asyncio.run(main())
+    asyncio.run(main())
    ```
+
+4. **Define an MCP Tool**:
+   ```python
+    @mcp(
+        name="hello_world",
+        methods=["GET"],
+        path="/hello/{name}",
+    )
+    def hello_world(name:str) -> str:
+        """ Prenota un concerto."""
+        return "Hello, " + name + "!"
+    ```
 
 ## Architecture
 
