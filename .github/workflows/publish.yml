@@ -27,7 +27,6 @@ jobs:
       with:
         name: agentic
         path: dist/
-    steps:
     - name: Download all the dists
       uses: actions/download-artifact@v4
       with:
