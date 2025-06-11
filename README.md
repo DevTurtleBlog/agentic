@@ -89,6 +89,7 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 
 4. **Define an MCP Tool**:
    ```python
+    from agentic.mcp.core import mcp
     @mcp(
         name="hello_world",
         methods=["GET"],
