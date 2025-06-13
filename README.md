@@ -33,7 +33,8 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 
 > **Note**: As this is a beta version, the API may change in future releases.
 
-1. **Define project structure**:
+
+1. **Project structure**:
 
 \- app <br>
 -- agents <br>
@@ -44,7 +45,29 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 --- hello_tool.py <br>
 main.py <br>
 
-1. **Define an Agent**:
+2. **Deploy the Server**:
+
+Create the main.py file with the following content:
+
+```python
+from agentic.server import AgenticApp
+AgenticApp(title="Agentic", root_package='app', port=8080).run()
+```
+
+The 'app' package should contain the agents and tools (see below). <br>
+You can define sub-packages to organize your agents and tools (you must define the __init__.py file in each package). At the server start, the server will automatically discover all agents and tools.<br>
+Run the app with:
+
+```
+python main.py
+```
+
+The app will start by default on "[http://localhost:8080](http://localhost:8080)".<br>
+You can see the APIs documentation at "[http://localhost:8080/docs](http://localhost:8080/docs)".
+
+## A2A
+
+### Define an Agent:
 
 Create the hello_agent.py file with the following content:
 
@@ -72,44 +95,7 @@ class HelloAgent(BaseAgent):
         return "Hello " + name + "!"
 ```
 
-2. **Define an MCP Tool**:
-
-Create the hello_tool.py file with the following content:
-
-```python
-from agentic.mcp.core import mcp
-
-@mcp(
-    methods=["GET"],
-    tags=["hello"],
-    path="/hello/{name}",
-)
-def hello_world(name:str) -> str:
-    """ Hello World MCP tool """
-    return "Hello, " + name + "!"
-```
-
-3. **Deploy the Server**:
-
-Create the main.py file with the following content:
-
-```python
-from agentic.server import AgenticApp
-AgenticApp(title="Agentic", root_package='app', port=8080).run()
-```
-
-The 'app' package should contain the agents and tools defined in steps 1 and 2. <br>
-You can define sub-packages (must define the __init__.py file) to organize your agents and tools. At the server start, the server will automatically discover all agents and tools.<br>
-Run the app with:
-
-```
-python main.py
-```
-
-The app will start by default on "[http://localhost:8080](http://localhost:8080)".
-You can see the APIs documentation at "[http://localhost:8080/docs](http://localhost:8080/docs)".
-
-4. **Use the A2A Client**:
+### Use the A2A Client:
 
 To test the server, you can use the A2A client. Here's an example of how to use the client to interact with the server:
 
@@ -134,9 +120,36 @@ if __name__ == "__main__":
 asyncio.run(main())
 ```
 
-## Integration with external MCP client
+## MCP
+
+### Define an MCP Tool:
+
+Create the hello_tool.py file with the following content:
+
+```python
+from agentic.mcp.core import mcp
+
+@mcp(
+    methods=["GET"],
+    tags=["hello"],
+    path="/hello/{name}",
+)
+def hello_world(name:str) -> str:
+    """ Hello World MCP tool """
+    return "Hello, " + name + "!"
+```
+
+### Integration with external MCP client:
+
 The MCP server can be integrated with any MCP client such as [Cloude Desktop](https://claude.ai/download).
-Below is an example configuration (claude_desktop_config.json):
+To connect the client with the remote server you need to use mcp-proxy.
+To install the proxy you can use uv:
+
+```
+uv tool install mcp-proxy
+```
+
+Below is an example for claude_desktop_config.json:
 
 ```json
 {
@@ -147,12 +160,6 @@ Below is an example configuration (claude_desktop_config.json):
         }
     }
 }
-```
-
-To configure the mcp proxy you can use uv:
-
-```
-uv tool install mcp-proxy
 ```
 
 ## Contributing
