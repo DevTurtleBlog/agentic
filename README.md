@@ -1,15 +1,36 @@
 # Agentic A2A
 
-A Python framework for developing and deploying complete AI applications that includes:
-- Multi-agent systems according to the Agent2Agent (A2A) protocol
-- MCP tools
-
 > ⚠️ **Beta Version**: This framework is currently in active development and is considered a beta release. Features may change, and some functionality may be unstable.
+
+A Python framework for developing and deploying complete AI applications based on the following protocols:
+- Agent2Agent (A2A)
+- Model Context Protocol (MCP)
+
+
+## Table of contents
+
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Development Status](#development-status)
+- [Getting Started](#getting-started)
+  - [Project structure](#project-structure)
+  - [Deploy the Server](#deploy-the-server)
+- [A2A](#a2a)
+  - [Define an Agent](#define-an-agent)
+  - [Use the A2A Client](#use-the-a2a-client)
+- [MCP](#mcp)
+  - [Define an MCP Tool](#define-an-mcp-tool)
+  - [Integration with external MCP client](#integration-with-external-mcp-client)
+- [Contributing](#contributing)
+- [Links](#links)
+
 
 ## Overview
 
 Agentic is a powerful framework that simplifies the creation of multi-agent systems by leveraging the a2a protocol. Built on top of [FastAPI](https://fastapi.tiangolo.com/) and the [a2a-sdk](https://github.com/google-a2a/a2a-python), Agentic enables developers to easily define, deploy, and manage multiple AI agents.
 Agentic also allows the creation of tools according to the MCP standard. The MCP system is built on top of [FastApiMCP](https://github.com/tadata-org/fastapi_mcp).
+
+Generally speaking, an Agentic application is a FastAPI application in all respects. It is therefore possible to exploit all the potential of the original framework with the addition of some utilities that simplify the implementation. For example, agentic provides a decorators system that simplifies the configuration of resources.
 
 ## Key Features
 
@@ -34,7 +55,7 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 > **Note**: As this is a beta version, the API may change in future releases.
 
 
-1. **Project structure**:
+### Project structure:
 
 \- app <br>
 -- agents <br>
@@ -45,7 +66,7 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 --- hello_tool.py <br>
 main.py <br>
 
-2. **Deploy the Server**:
+### Deploy the Server:
 
 Create the main.py file with the following content:
 
