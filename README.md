@@ -134,12 +134,12 @@ Feedback and contributions are highly appreciated as we work towards a stable re
     asyncio.run(main())
     ```
 
-### Integration with external MCP client
+## Integration with external MCP client
 
     The MCP server can be integrated with any MCP client such as [Cloude Desktop](https://claude.ai/download).
     Below is an example configuration (claude_desktop_config.json):
 
-    ```json
+    ```
     {
         "mcpServers": {
             "mytool": {
