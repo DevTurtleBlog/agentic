@@ -80,8 +80,8 @@ Feedback and contributions are highly appreciated as we work towards a stable re
     from agentic.mcp.core import mcp
 
     @mcp(
-        name="hello_world",
         methods=["GET"],
+        tags=["hello"],
         path="/hello/{name}",
     )
     def hello_world(name:str) -> str:
@@ -95,7 +95,7 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 
     ```python
     from agentic.server import AgenticApp
-    AgenticApp(root_package='app').run()
+   AgenticApp(title="Agentic", root_package='app', port=8080).run()
     ```
 
     The 'app' package should contain the agents and tools defined in steps 1 and 2. <br>
@@ -106,8 +106,8 @@ Feedback and contributions are highly appreciated as we work towards a stable re
     python main.py
     ```
 
-    The app will start by default on "[http://localhost:9999](http://localhost:9999)".
-    You can see the APIs documentation at "[http://localhost:9999/docs](http://localhost:9999/docs)".
+    The app will start by default on "[http://localhost:8080](http://localhost:8080)".
+    You can see the APIs documentation at "[http://localhost:8080/docs](http://localhost:8080/docs)".
 
 4. **Use the A2A Client**:
 
@@ -120,7 +120,7 @@ Feedback and contributions are highly appreciated as we work towards a stable re
     from a2a.types import DataPart
 
     async def main():
-        client = ClientA2A(url='http://localhost:9999')
+        client = ClientA2A(url='http://localhost:8080')
 
         data = { "messages": [
                 {'role': 'user', 'content': 'Hello!'},
@@ -134,17 +134,27 @@ Feedback and contributions are highly appreciated as we work towards a stable re
     asyncio.run(main())
     ```
 
-## Architecture
+### Integration with external MCP client
 
-Agentic follows the agent-to-agent (a2a) protocol specification, enabling:
-- Standardized communication between agents
-- Interoperability with other a2a-compliant systems
-- Scalable multi-agent architectures
-- Easy integration with existing AI workflows
+    The MCP server can be integrated with any MCP client such as [Cloude Desktop](https://claude.ai/download).
+    Below is an example configuration (claude_desktop_config.json):
 
-## Requirements
+    ```json
+    {
+        "mcpServers": {
+            "mytool": {
+                "command": "uv",
+                "args": ["tool", "run", "mcp-proxy", "http://localhost:8080/mcp"]
+            }
+        }
+    }
+    ```
 
-- Python 3.8+
+    To configure the mcp proxy you can use uv:
+
+    ```
+    uv tool install mcp-proxy
+    ```
 
 ## Contributing
 
