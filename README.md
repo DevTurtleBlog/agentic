@@ -34,6 +34,7 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 > **Note**: As this is a beta version, the API may change in future releases.
 
 1. **Define project structure**:
+
     \- app <br>
     -- agents <br>
     --- __init__.py <br>
@@ -98,7 +99,7 @@ Feedback and contributions are highly appreciated as we work towards a stable re
     ```
 
     The 'app' package should contain the agents and tools defined in steps 1 and 2. <br>
-    You can define sub-packages to organize your agents and tools. At the server start, the server will automatically discover all agents and tools.<br>
+    You can define sub-packages (must define the __init__.py file) to organize your agents and tools. At the server start, the server will automatically discover all agents and tools.<br>
     Run the app with:
 
     ```
@@ -143,7 +144,7 @@ Agentic follows the agent-to-agent (a2a) protocol specification, enabling:
 
 ## Requirements
 
-- Python 3.13+
+- Python 3.8+
 
 ## Contributing
 

@@ -11,7 +11,7 @@ setup(
         'agentic.a2a',
         'agentic.mcp'
     ]),
-    version='0.1.6',
+    version='0.1.7',
     description='Python framework for implementing multi-agent systems',
     author='devturtleblog@gmail.com',
     long_description=long_description,
@@ -22,7 +22,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     install_requires=['uvicorn', 'fastapi', 'a2a-sdk', 'fastapi-mcp'],
     extras_require={
         'dev': ['pytest', 'pytest-runner'],

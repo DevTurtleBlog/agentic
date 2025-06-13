@@ -1,8 +1,9 @@
 import types
+from fastapi import APIRouter
 
 registered_tools = {}
 
-def mcp(methods:list[str]=["GET"], name:str=None, tags:list[str]=None, path:str=None):
+def mcp(methods:list[str]=["GET"], name:str=None, tags:list[str]=None, path:str=None, router:APIRouter=None):
     """Define an MCP tool function"""
     def decorator(func):
         nonlocal name, path
@@ -17,7 +18,8 @@ def mcp(methods:list[str]=["GET"], name:str=None, tags:list[str]=None, path:str=
             "path": path if path else name,
             "methods": methods,
             "tags": tags,
-            "func": func
+            "func": func,
+            "router": router
         }
         return func
     return decorator

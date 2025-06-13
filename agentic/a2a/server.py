@@ -10,13 +10,11 @@ from agentic.a2a.core import registered_agents, registered_skills, AgentInfo
 class AgenticA2AServer:
     """ The server class for a2a protocol """
 
-    def __init__(self, fastapi:FastAPI, base_url:str, path:str=None):
+    def __init__(self, fastapi:FastAPI, base_url:str, enable_discovery:bool=False):
         """ Initialize the AgenticServer """
         self.base_url = base_url
         self.fastapi = fastapi
-        self.path = path if path is not None else "a2a"
-        if self.path.startswith('/'):
-            self.path = self.path[1:]
+        self.enable_discovery = enable_discovery
         self.__merge_skills_in_agents()
         self.__init_agent()
         self.__setup_server()
@@ -46,14 +44,15 @@ class AgenticA2AServer:
         for builder in app_builders:
             url = builder.agent_card.url.replace(self.base_url, '')
             self.fastapi.mount(url, builder.build()) 
-        @self.fastapi.get("/"+self.path+"/agents", response_model=list[dict])
-        def list_agents() -> list[AgentInfo]:
-            agent_list:list[AgentInfo]=[]
-            for agent in agent_cards:
-                agent_url = agent.url.replace(self.base_url, '')
-                agent_list.append(AgentInfo(name=agent.name, path=agent_url, description=agent.description, version=agent.version))
-            return agent_list
-        self.list_agents = list_agents
+        if self.enable_discovery:
+            @self.fastapi.get("/a2a/agents", response_model=list[dict], tags=["a2a"])
+            def list_agents() -> list[AgentInfo]:
+                agent_list:list[AgentInfo]=[]
+                for agent in agent_cards:
+                    agent_url = agent.url.replace(self.base_url, '')
+                    agent_list.append(AgentInfo(name=agent.name, path=agent_url, description=agent.description, version=agent.version))
+                return agent_list
+            self.list_agents = list_agents
         
     def __generate_agents_cards(self):
         """ Generate the agents cards """

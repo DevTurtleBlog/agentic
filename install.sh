@@ -1,5 +1,5 @@
 source .venv/bin/activate
-pip uninstall -y agentic
+pip uninstall -y agentic-a2a
 rm -rf build 
 rm -rf dist 
 pip install setuptools wheel
