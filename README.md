@@ -35,126 +35,125 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 
 1. **Define project structure**:
 
-    \- app <br>
-    -- agents <br>
-    --- __init__.py <br>
-    --- hello_agent.py <br>
-    -- tools <br>
-    --- __init__.py <br>
-    --- hello_tool.py <br>
-    main.py <br>
+\- app <br>
+-- agents <br>
+--- __init__.py <br>
+--- hello_agent.py <br>
+-- tools <br>
+--- __init__.py <br>
+--- hello_tool.py <br>
+main.py <br>
 
 1. **Define an Agent**:
 
-    Create the hello_agent.py file with the following content:
+Create the hello_agent.py file with the following content:
 
-    ```python
-    from agentic.a2a.core import agent, skill, BaseAgent
-    from a2a.server.agent_execution import RequestContext
-    from a2a.utils import new_agent_text_message
-    from a2a.server.events import Event
+```python
+from agentic.a2a.core import agent, skill, BaseAgent
+from a2a.server.agent_execution import RequestContext
+from a2a.utils import new_agent_text_message
+from a2a.server.events import Event
 
-    @agent(
-        description="Hello World Agent",
+@agent(
+    description="Hello World Agent",
+)
+class HelloAgent(BaseAgent):
+
+    async def execute(self, input:RequestContext) -> Event:
+        out = new_agent_text_message("Hello World!")
+        return out
+
+    @skill(
+        name="say_hello", 
+        description="Say hello to someone by name",
     )
-    class HelloAgent(BaseAgent):
-
-        async def execute(self, input:RequestContext) -> Event:
-            out = new_agent_text_message("Hello World!")
-            return out
-
-        @skill(
-            name="say_hello", 
-            description="Say hello to someone by name",
-        )
-        async def say_hello(self, name):
-            ...
-            return "Hello " + name + "!"
-    ```
+    async def say_hello(self, name):
+        ...
+        return "Hello " + name + "!"
+```
 
 2. **Define an MCP Tool**:
 
-    Create the hello_tool.py file with the following content:
+Create the hello_tool.py file with the following content:
 
-    ```python
-    from agentic.mcp.core import mcp
+```python
+from agentic.mcp.core import mcp
 
-    @mcp(
-        methods=["GET"],
-        tags=["hello"],
-        path="/hello/{name}",
-    )
-    def hello_world(name:str) -> str:
-        """ Hello World MCP tool """
-        return "Hello, " + name + "!"
-    ```
+@mcp(
+    methods=["GET"],
+    tags=["hello"],
+    path="/hello/{name}",
+)
+def hello_world(name:str) -> str:
+    """ Hello World MCP tool """
+    return "Hello, " + name + "!"
+```
 
 3. **Deploy the Server**:
 
-    Create the main.py file with the following content:
+Create the main.py file with the following content:
 
-    ```python
-    from agentic.server import AgenticApp
-   AgenticApp(title="Agentic", root_package='app', port=8080).run()
-    ```
+```python
+from agentic.server import AgenticApp
+AgenticApp(title="Agentic", root_package='app', port=8080).run()
+```
 
-    The 'app' package should contain the agents and tools defined in steps 1 and 2. <br>
-    You can define sub-packages (must define the __init__.py file) to organize your agents and tools. At the server start, the server will automatically discover all agents and tools.<br>
-    Run the app with:
+The 'app' package should contain the agents and tools defined in steps 1 and 2. <br>
+You can define sub-packages (must define the __init__.py file) to organize your agents and tools. At the server start, the server will automatically discover all agents and tools.<br>
+Run the app with:
 
-    ```
-    python main.py
-    ```
+```
+python main.py
+```
 
-    The app will start by default on "[http://localhost:8080](http://localhost:8080)".
-    You can see the APIs documentation at "[http://localhost:8080/docs](http://localhost:8080/docs)".
+The app will start by default on "[http://localhost:8080](http://localhost:8080)".
+You can see the APIs documentation at "[http://localhost:8080/docs](http://localhost:8080/docs)".
 
 4. **Use the A2A Client**:
 
-    To test the server, you can use the A2A client. Here's an example of how to use the client to interact with the server:
+To test the server, you can use the A2A client. Here's an example of how to use the client to interact with the server:
 
-    ```python
-    import asyncio
-    from agentic.a2a.client import ClientA2A
-    from agentic.a2a.utility import ResponseParser
-    from a2a.types import DataPart
+```python
+import asyncio
+from agentic.a2a.client import ClientA2A
+from agentic.a2a.utility import ResponseParser
+from a2a.types import DataPart
 
-    async def main():
-        client = ClientA2A(url='http://localhost:8080')
+async def main():
+    client = ClientA2A(url='http://localhost:8080')
 
-        data = { "messages": [
-                {'role': 'user', 'content': 'Hello!'},
-        ]}
-        
-        result = await client.invoke("/say_hello", parts=[DataPart(data=data)])
-        parser = ResponseParser(result)
-        print("RESULT: ", parser.get_parts())
+    data = { "messages": [
+            {'role': 'user', 'content': 'Hello!'},
+    ]}
+    
+    result = await client.invoke("/say_hello", parts=[DataPart(data=data)])
+    parser = ResponseParser(result)
+    print("RESULT: ", parser.get_parts())
 
-    if __name__ == "__main__":
-    asyncio.run(main())
-    ```
+if __name__ == "__main__":
+asyncio.run(main())
+```
 
 ## Integration with external MCP client
+The MCP server can be integrated with any MCP client such as [Cloude Desktop](https://claude.ai/download).
+Below is an example configuration (claude_desktop_config.json):
 
-    The MCP server can be integrated with any MCP client such as [Cloude Desktop](https://claude.ai/download).
-    Below is an example configuration (claude_desktop_config.json):
-
-    ```
-    {
-        "mcpServers": {
-            "mytool": {
-                "command": "uv",
-                "args": ["tool", "run", "mcp-proxy", "http://localhost:8080/mcp"]
-            }
+```json
+{
+    "mcpServers": {
+        "mytool": {
+            "command": "uv",
+            "args": ["tool", "run", "mcp-proxy", "http://localhost:8080/mcp"]
         }
     }
-    ```
+}
+```
 
-    To configure the mcp proxy you can use uv:
+To configure the mcp proxy you can use uv:
 
-    ```
-    uv tool install mcp-proxy
-    ```
+```
+uv tool install mcp-proxy
+```
 
 ## Contributing
 
