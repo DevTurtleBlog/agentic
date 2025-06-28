@@ -193,6 +193,10 @@ As this is a beta project, contributions are especially welcome! Please feel fre
 
 ## Links
 
+### Tutorials
+- [Agentic Framework - Develop MCP Tools in Python](https://www.devturtleblog.com/agentic-a2a-framework-mcp/)
+
+### Related fonts
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [A2A Python SDK](https://github.com/google-a2a/a2a-python)
 - [FastAPI MCP](https://github.com/tadata-org/fastapi_mcp)
