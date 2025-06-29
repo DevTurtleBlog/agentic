@@ -33,6 +33,7 @@ class ClientA2A:
                 messageId=message_id,
             )
             request = SendMessageRequest(
+                id=uuid4().hex,
                 params=MessageSendParams(message=message)
             )
             response = await client.send_message(request)

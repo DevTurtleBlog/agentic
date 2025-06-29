@@ -89,7 +89,7 @@ class AgenticA2AServer:
             async def execute(context: RequestContext, event_queue: EventQueue,) -> None:
                 agent_instance = registered_agents[agent_card.name]['class']()
                 result:Event = await agent_instance.execute(context)
-                event_queue.enqueue_event(result)
+                await event_queue.enqueue_event(result)
             async def cancel(context: RequestContext, event_queue: EventQueue,) -> None:
                 raise Exception('cancel not supported')
             executor = type(agent_card.name + "Executor", (AgentExecutor,), {

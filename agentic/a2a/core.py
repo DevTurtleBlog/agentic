@@ -47,13 +47,18 @@ def skill(id=None, name=None, description=None, tags=[], examples=[]):
         if "." not in qualname:
             raise TypeError("@skill should be used on a class method")
         
-        class_name = qualname.split(".")[0]
+        splitted = qualname.split(".")
+        if len(splitted) < 2:
+            raise TypeError("@skill should be used on a class method")
+        
+        class_name = splitted[-2]
+        method_name = splitted[-1]
         
         nonlocal id, name
         if id is None:
-            id = class_name
+            id = method_name
         if name is None:
-            name = class_name
+            name = method_name
         
         skill = {
             "id": id,

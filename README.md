@@ -52,9 +52,6 @@ Feedback and contributions are highly appreciated as we work towards a stable re
 
 ## Getting Started
 
-> **Note**: As this is a beta version, the API may change in future releases.
-
-
 ### Project structure:
 
 \- app <br>
@@ -133,12 +130,12 @@ async def main():
             {'role': 'user', 'content': 'Hello!'},
     ]}
     
-    result = await client.invoke("/say_hello", parts=[DataPart(data=data)])
+    result = await client.invoke("/helloagent", parts=[DataPart(data=data)])
     parser = ResponseParser(result)
     print("RESULT: ", parser.get_parts())
 
 if __name__ == "__main__":
-asyncio.run(main())
+    asyncio.run(main())
 ```
 
 ## MCP
